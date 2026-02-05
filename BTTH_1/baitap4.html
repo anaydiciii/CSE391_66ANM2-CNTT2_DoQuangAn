@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bai tap 4</title>
+
+  <style>
+    /* khung tổng */
+    body{
+      margin:0;
+      padding:22px;
+      font-family: Arial, sans-serif;
+      font-size:13px;
+      background:#f4f4f4;
+    }
+    .wrap{
+      width:820px;
+      margin:0 auto;
+      background:#fff;
+      border:1px solid #cfcfcf;
+      box-shadow:0 0 10px rgba(0,0,0,.08);
+      padding:18px 34px;
+    }
+
+    /* tiêu đề section */
+    .sec-title{
+      font-weight:bold;
+      margin:22px 0 6px;
+      font-size:15px;
+    }
+    .line{
+      height:1px;
+      background:#9b9b9b;
+      border:0;
+      margin:0 0 14px 0;
+    }
+
+    /* bảng form */
+    table.form{
+      width:100%;
+      border-collapse:collapse;
+    }
+    table.form td{
+      padding:5px 0;
+      vertical-align:top;
+    }
+    td.k{
+      width:200px;
+      font-weight:bold;
+      color:#333;
+      padding-top:7px;
+    }
+
+    /* input chung */
+    input[type="text"], input[type="email"], select, textarea{
+      width:96%;
+      border:1px solid #7f9db9;
+      padding:4px;
+      box-sizing:border-box;
+      font-size:13px;
+    }
+    .w55{ width:55% !important; }
+
+    /* input + icon */
+    .field{
+      position:relative;
+      width:96%;
+    }
+    .field input{ width:100%; padding-right:26px; }
+    .ico{
+      position:absolute;
+      right:6px;
+      top:50%;
+      transform:translateY(-50%);
+      color:#666;
+      font-size:14px;
+      user-select:none;
+    }
+
+    /* group radio/checkbox */
+    .opts label{
+      font-weight:normal;
+      display:inline-block;
+      margin:0 0 4px 0;
+    }
+
+    /* toolbar */
+    .toolbox{
+      width:96%;
+      border:1px solid #ccc;
+      background:#f6f6f6;
+      box-sizing:border-box;
+      padding:2px;
+      margin-bottom:0;
+    }
+    .tool-row{
+      display:flex;
+      align-items:center;
+      gap:2px;
+      padding:1px 0;
+      flex-wrap:wrap;
+    }
+    .tool{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:18px;
+      height:18px;
+      font-size:11px;
+      color:#555;
+      border:1px solid transparent;
+      cursor:pointer;
+      padding:0 2px;
+      user-select:none;
+    }
+    .tool:hover{
+      border:1px solid #aaa;
+      background:#e8e8e8;
+    }
+    .pipe{
+      color:#c9c9c9;
+      margin:0 4px;
+      user-select:none;
+    }
+
+    /* notes */
+    textarea.notes{
+      width:96%;
+      height:200px;
+      border:1px solid #ccc;
+      resize:vertical;
+      padding:8px;
+      font-family:"Times New Roman", Times, serif;
+      font-size:15px;
+      box-sizing:border-box;
+      margin:0;
+    }
+
+    /* captcha dot-matrix */
+    .captchaRow{
+      width:96%;
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      margin:6px 0 2px;
+    }
+    .captchaDots{
+      font-family: "Courier New", Courier, monospace;
+      font-size:34px;
+      letter-spacing:10px;
+      font-weight:700;
+
+      /* tạo hiệu ứng chấm chấm */
+      background-image: radial-gradient(#111 1px, transparent 1px);
+      background-size: 4px 4px;
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+    .captchaHint{
+      font-size:11px;
+    }
+    .captchaHint a{
+      color:#000;
+      text-decoration:none;
+    }
+
+    /* footer */
+    .foot{
+      margin-top:18px;
+      padding-top:10px;
+      border-top:2px solid #999;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .navbtn{
+      width:25px; height:25px;
+      background:#444;
+      color:#fff;
+      border:1px solid #222;
+      cursor:pointer;
+    }
+    .req{
+      font-size:11px;
+      margin-top:6px;
+    }
+    .actbtn{
+      background:#444;
+      color:#fff;
+      border:1px solid #222;
+      padding:5px 12px;
+      font-weight:bold;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      margin-left:6px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <form action="#">
+
+      <!-- BASIC -->
+      <div class="sec-title">Basic Info</div>
+      <hr class="line" />
+
+      <table class="form">
+        <tr>
+          <td class="k">Employee ID</td>
+          <td style="padding-top:7px;">9</td>
+        </tr>
+        <tr>
+          <td class="k">Last Name</td>
+          <td style="padding-top:7px;">Dodsworth</td>
+        </tr>
+        <tr>
+          <td class="k">First Name</td>
+          <td>
+            <div class="field">
+              <input type="text" value="Anne" />
+              <span class="ico">&#128203;</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="k">Gender</td>
+          <td class="opts">
+            <label><input type="radio" name="g2" /> Male</label><br />
+            <label><input type="radio" name="g2" /> Female</label><br />
+            <label><input type="radio" name="g2" /> XXX</label><br />
+            <label><input type="radio" name="g2" checked /> ZZZ</label>
+          </td>
+        </tr>
+        <tr>
+          <td class="k">Title</td>
+          <td><input type="text" value="Sales Representative" /></td>
+        </tr>
+        <tr>
+          <td class="k">Suffix</td>
+          <td><input type="text" value="Ms." /></td>
+        </tr>
+        <tr>
+          <td class="k">BirthDate</td>
+          <td>
+            <div class="field w55">
+              <input type="text" value="1969-07-02 00:00:00" />
+              <span class="ico" style="right:-26px; font-weight:bold;">(?)</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="k">HireDate</td>
+          <td><input class="w55" type="text" value="1994-11-15 00:00:00" /></td>
+        </tr>
+        <tr>
+          <td class="k">SSN # (if applicable)</td>
+          <td>
+            <div class="field">
+              <input type="text" />
+              <span class="ico">&#128274;</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="k">Reports To</td>
+          <td>
+            <select class="w55">
+              <option selected>Buchanan</option>
+              <option>Davolio</option>
+              <option>Fuller</option>
+            </select>
+          </td>
+        </tr>
+      </table>
+
+      <!-- CONTACT -->
+      <div class="sec-title">Contact Info</div>
+      <hr class="line" />
+
+      <table class="form">
+        <tr>
+          <td class="k">Email</td>
+          <td><input type="email" placeholder="name@example.com" /></td>
+        </tr>
+        <tr>
+          <td class="k">Address</td>
+          <td><input type="text" value="7 Houndstooth Rd." /></td>
+        </tr>
+        <tr>
+          <td class="k">City</td>
+          <td><input type="text" value="London" /></td>
+        </tr>
+        <tr>
+          <td class="k">Region</td>
+          <td><input type="text" /></td>
+        </tr>
+        <tr>
+          <td class="k">Postal Code</td>
+          <td><input type="text" value="WG2 7LT" /></td>
+        </tr>
+        <tr>
+          <td class="k">Country</td>
+          <td>
+            <select class="w55">
+              <option selected>Russian Federation</option>
+              <option>UK</option>
+              <option>USA</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td class="k">US Home Phone</td>
+          <td><input type="text" value="(234)234-2342" /></td>
+        </tr>
+        <tr>
+          <td class="k">Photo</td>
+          <td><input type="text" value="EmpID9.bmp" /></td>
+        </tr>
+      </table>
+
+      <!-- OPTIONAL -->
+      <div class="sec-title">Optional Info</div>
+      <hr class="line" />
+
+      <table class="form">
+        <tr>
+          <td class="k">Notes</td>
+          <td>
+            <div class="toolbox">
+              <div class="tool-row">
+                <span class="tool" style="font-weight:bold;">B</span>
+                <span class="tool" style="font-style:italic;">I</span>
+                <span class="tool" style="text-decoration:line-through;">S</span>
+                <span class="tool" style="text-decoration:underline;">U</span>
+                <span class="pipe">|</span>
+
+                <span class="tool">&#8803;</span>
+                <span class="tool">&#8801;</span>
+                <span class="tool">&#8802;</span>
+                <span class="tool">&#8803;</span>
+                <span class="pipe">|</span>
+
+                <span class="tool">&#8676;</span>
+                <span class="tool">&#8677;</span>
+                <span class="pipe">|</span>
+
+                <span class="tool">X<sub>2</sub></span>
+                <span class="tool">X<sup>2</sup></span>
+                <span class="pipe">|</span>
+
+                <span class="tool" style="color:green">&#8617;</span>
+                <span class="tool" style="color:green">&#8618;</span>
+                <span class="pipe">|</span>
+
+                <span class="tool">&#8226;&#129046;</span>
+                <span class="tool">1&#129046;</span>
+                <span class="pipe">|</span>
+
+                <span class="tool">&#128279;</span>
+                <span class="tool">&#128280;</span>
+              </div>
+
+              <div class="tool-row" style="border-top:1px solid #eee; margin-top:2px; padding-top:2px;">
+                <span class="tool">&#128443;</span>
+                <span class="tool">&#128444;</span>
+                <span class="tool">&#128465;</span>
+                <span class="pipe">|</span>
+                <span class="tool">H1</span>
+                <span class="tool">H2</span>
+                <span class="tool">H3</span>
+                <span class="pipe">|</span>
+                <span class="tool" style="color:red; font-weight:bold; font-size:14px;">X</span>
+              </div>
+            </div>
+
+            <textarea class="notes">Anne has a BA degree in English from St. Lawrence College. She is fluent in French and German.ZZZ</textarea>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="k">Preferred Shift</td>
+          <td class="opts">
+            <label><input type="checkbox" /> Regular</label><br />
+            <label><input type="checkbox" checked /> Gravy Yard</label>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="k">Active?</td>
+          <td><input type="checkbox" checked /></td>
+        </tr>
+
+        <tr>
+          <td class="k">Are you human?</td>
+          <td>
+            <div class="captchaRow">
+              <div class="captchaDots">TIDAWO</div>
+              <div class="captchaHint"><a href="#">Click to change</a></div>
+            </div>
+            <input type="text" style="width:96%;" />
+          </td>
+        </tr>
+      </table>
+
+      <div class="foot">
+        <div>
+          <button type="button" class="navbtn">&#9664;</button>
+          <button type="button" class="navbtn">&#9654;</button>
+          <div class="req">* required</div>
+        </div>
+
+        <div>
+          <button type="submit" class="actbtn"><span>&#128190;</span>Submit</button>
+          <button type="button" class="actbtn"><span>&#10006;</span>Cancel</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</body>
+</html>
