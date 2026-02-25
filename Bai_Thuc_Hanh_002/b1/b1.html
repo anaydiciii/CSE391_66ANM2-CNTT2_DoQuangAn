@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bài tập 1 - Flexbox Form</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body{
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #ffffff;
+      color: #333;
+    }
+
+
+    .title-bar{
+      width: 100%;
+      background: #bfe6f2;        
+      padding: 8px 14px;
+      font-weight: 700;
+      border-bottom: 2px solid #9fd3e2;
+    }
+
+
+    .wrap{
+      padding: 14px;
+    }
+
+    .panel{
+      border: 2px solid #cfcfcf;
+      padding: 16px;
+    }
+
+    .panel h3{
+      margin: 0 0 12px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+
+    form{
+      display: flex;
+      flex-direction: column;
+      gap: 10px; 
+    }
+
+    .row{
+      display: flex;
+      gap: 16px; 
+    }
+
+    .row.two .field{
+      flex: 1; /* 2 ô chia đều */
+      min-width: 240px; /* để nhỏ quá thì tự xuống dòng */
+    }
+
+    .row.one .field{
+      flex: 1;
+    }
+
+    .field input,
+    .field textarea{
+      width: 100%;
+      border: 1px solid #d7d7d7;
+      padding: 10px 12px;
+      font-size: 13px;
+      outline: none;
+      border-radius: 2px;
+      background: #fff;
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder{
+      color: #9a9a9a;
+    }
+
+    .field textarea{
+      height: 220px;     /* giống khung lớn trong ảnh */
+      resize: none;      /* muốn kéo thì đổi thành: vertical */
+    }
+
+    /* Hàng cuối: button trái - note phải */
+    .row.bottom{
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .btn{
+      border: none;
+      padding: 8px 14px;
+      font-size: 12px;
+      border-radius: 2px;
+      cursor: pointer;
+      background: #6ec1e4;  /* xanh nút */
+      color: #fff;
+    }
+
+    .btn:hover{
+      filter: brightness(0.95);
+    }
+
+    .note{
+      font-size: 12px;
+      color: #666;
+      white-space: nowrap;
+    }
+
+    /* Responsive: màn nhỏ thì note xuống dòng, 2 input xếp dọc */
+    @media (max-width: 640px){
+      .row.two{ flex-wrap: wrap; }
+      .row.bottom{ flex-direction: column; align-items: flex-start; }
+      .note{ white-space: normal; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="panel">
+      <h3>Get in touch with us by filling contact form below</h3>
+
+      <form>
+        <!-- Hàng 1: 2 input ngang nhau -->
+        <div class="row two">
+          <div class="field">
+            <input type="text" placeholder="* Enter your full name" />
+          </div>
+          <div class="field">
+            <input type="email" placeholder="* Enter your email address" />
+          </div>
+        </div>
+
+        <!-- Hàng 2: subject full width -->
+        <div class="row one">
+          <div class="field">
+            <input type="text" placeholder="Enter your subject" />
+          </div>
+        </div>
+
+        <!-- Hàng 3: textarea full width -->
+        <div class="row one">
+          <div class="field">
+            <textarea placeholder="* Your message here..."></textarea>
+          </div>
+        </div>
+
+        <!-- Hàng cuối: button trái + note phải -->
+        <div class="row bottom">
+          <button type="submit" class="btn">Send message</button>
+          <div class="note">* Please fill all required form field, thanks!</div>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
