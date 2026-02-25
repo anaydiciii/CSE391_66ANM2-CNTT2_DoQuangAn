@@ -1,0 +1,243 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #222;
+  background: #fff;
+}
+
+.container {
+  width: min(1000px, 92%);
+  margin: 0 auto;
+}
+
+/* HEADER */
+.header {
+  background: #0e3b63;  /* xanh đậm giống ảnh */
+  color: #fff;
+}
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.logo {
+  color: #ffd54d;
+  font-weight: 800;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+}
+
+.nav {
+  display: flex;
+  gap: 18px;
+}
+.nav a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+  opacity: 0.9;
+}
+.nav a:hover { opacity: 1; text-decoration: underline; }
+
+/* HERO */
+.hero {
+  position: relative;
+  height: 320px;
+  /* dùng ảnh nền giả lập bằng gradient (không cần tải ảnh) */
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), transparent 45%),
+    linear-gradient(120deg, #2bb3c0, #0d7aa3);
+  overflow: hidden;
+}
+
+/* tạo “cảm giác” có vật thể giữa (giống ván) */
+.hero::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:55%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 220px;
+  border-radius: 40px;
+  background: rgba(255,255,255,0.35);
+  outline: 3px solid rgba(255,255,255,0.45);
+  filter: blur(0.2px);
+  z-index: 1;
+}
+
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.08);
+  z-index: 0;
+}
+
+.hero__content {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.hero__box {
+  background: rgba(30, 30, 30, 0.65);
+  color: #fff;
+  padding: 18px 22px;
+  border-radius: 4px;
+  text-align: center;
+  min-width: 360px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+}
+
+.hero__box h1 {
+  margin: 0 0 6px;
+  font-size: 22px;
+  letter-spacing: 0.8px;
+}
+.hero__box p {
+  margin: 0 0 12px;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.btn {
+  display: inline-block;
+  background: #ffd54d;
+  color: #222;
+  text-decoration: none;
+  padding: 7px 12px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.btn:hover { filter: brightness(0.95); }
+
+/* HIGHLIGHTS */
+.highlights {
+  padding: 16px 0 22px;
+}
+
+.highlights h2 {
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 1px;
+  margin: 10px 0 12px;
+  color: #222;
+}
+
+.cards {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+}
+
+.card {
+  flex: 1;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+  overflow: hidden;
+  max-width: 320px;
+}
+
+.card__img {
+  height: 110px;
+  background-size: cover;
+  background-position: center;
+}
+
+/* giả lập 3 ảnh khác nhau bằng gradient */
+.img-1 { background: linear-gradient(135deg, #6ee7ff, #2d7dff); }
+.img-2 { background: linear-gradient(135deg, #c7ff7a, #1aa06b); }
+.img-3 { background: linear-gradient(135deg, #ffd6a5, #ff5d8f); }
+
+.card__cap {
+  margin: 8px 10px 10px;
+  text-align: center;
+  font-size: 10px;
+  color: #666;
+  letter-spacing: 0.4px;
+}
+.card__cap span {
+  color: #222;
+  font-weight: 800;
+}
+
+/* FOOTER */
+.footer {
+  background: #1f1f1f;
+  padding: 14px 0;
+}
+
+.footer__inner {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+}
+
+.social {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #2e2e2e;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 16px;
+}
+.social:hover { filter: brightness(1.15); }
+
+/* RESPONSIVE */
+@media (max-width: 760px) {
+  .nav { display: none; } /* giống bài mẫu đơn giản */
+  .hero__box { min-width: auto; width: 92%; }
+  .cards { flex-direction: column; align-items: center; }
+  .card { width: 92%; max-width: 420px; }
+}
+
+.header{
+  background:#0e3b63;
+  padding:18px 40px;
+}
+
+/* Flexbox chia 2 góc */
+.header-container{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+/* Logo */
+.logo{
+  color:#ffd54d;
+  margin:0;
+  font-weight:bold;
+}
+
+/* 🔥 BOX MENU giống ảnh */
+.nav-box{
+  display:flex;
+  gap:20px;
+
+  border:2px solid #ffd54d; /* viền vàng */
+  padding:6px 14px;
+}
+
+.nav-box a{
+  color:#ffd54d;
+  text-decoration:none;
+  font-size:14px;
+}
+
+.nav-box a:hover{
+  text-decoration:underline;
+}
