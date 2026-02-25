@@ -1,0 +1,116 @@
+* { box-sizing: border-box; }
+
+:root{
+  --frame-blue: #6fb7d6;
+  --text: #2f2f2f;
+  --muted: #777;
+}
+
+body{
+  margin: 0;
+  background: #fff;
+  color: var(--text);
+  font-family: 'Source Code Pro', monospace; /* ✅ giống ảnh */
+}
+
+/* viền xanh nhạt bao quanh */
+.frame{
+  width: min(1200px, 96%);
+  margin: 18px auto;
+  border: 2px solid var(--frame-blue);
+  background: #fff;
+}
+
+/* vùng nội dung */
+.container{
+  width: min(980px, 92%);
+  margin: 0 auto;
+  padding: 42px 0 60px;
+}
+
+/* title trên cùng */
+.title{
+  text-align: center;
+  margin: 0 0 44px;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.55;
+  letter-spacing: 1.2px;
+  color: #333;
+}
+
+/* layout 2 cột */
+.layout{
+  display: flex;
+  gap: 70px;
+  align-items: flex-start;
+}
+
+/* card trái */
+.card{
+  width: 330px;
+  background: #fff;
+  padding: 30px 28px;
+  box-shadow: 0 12px 26px rgba(0,0,0,0.12);
+}
+
+.card-title{
+  margin: 0 0 16px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.8;
+  color: #444;
+}
+
+.card-text{
+  margin: 0 0 28px;
+  font-size: 11px;
+  font-weight: 300;
+  line-height: 2;
+  color: #8a8a8a;
+}
+
+.author .name{
+  font-size: 11px;
+  font-weight: 500;
+  margin-bottom: 5px;
+  color: #3a3a3a;
+}
+
+.author .role{
+  font-size: 10px;
+  font-weight: 400;
+  color: #2f7bdc;
+}
+
+/* cột phải */
+.content{
+  flex: 1;
+  padding-top: 6px;
+}
+
+.content p{
+  margin: 0 0 18px;
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 2;
+  color: var(--muted);
+}
+
+.content .bold{
+  font-weight: 600;
+  color: #444;
+}
+
+/* responsive */
+@media (max-width: 900px){
+  .layout{
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .card{
+    width: 100%;
+    max-width: 420px;
+  }
+}
