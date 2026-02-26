@@ -1,0 +1,51 @@
+* { box-sizing: border-box; }
+
+body{
+  margin:0;
+  font-family:"Quicksand",sans-serif;
+}
+
+ul{
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+
+a{ text-decoration:none; }
+
+/* Header nằm đè lên ảnh */
+header{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  padding:18px 60px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  z-index:10;
+}
+
+#page-logo a{
+  font-family:"Oleo Script",cursive;
+  font-size:44px;
+  text-transform:uppercase;
+  color:rgb(245,243,160);
+  text-shadow:1px 1px 2px #000;
+}
+
+header nav ul{
+  display:flex;
+  gap:16px;
+}
+
+header nav a{
+  color: rgb(245,243,160);   /* màu vàng giống logo */
+  font-weight:700;
+  text-decoration:none;
+}
+
+header nav a:hover{
+  background:rgba(255,255,255,0.2);
+}
