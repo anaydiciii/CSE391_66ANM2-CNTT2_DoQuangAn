@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BTVN 2 - Multi-step Form</title>
+  <style>
+    *{
+      box-sizing:border-box;
+    }
+
+    body{
+      margin:0;
+      font-family:Arial, sans-serif;
+      background:linear-gradient(135deg,#89f7fe,#66a6ff);
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:30px;
+    }
+
+    .container{
+      width:100%;
+      max-width:500px;
+      background:white;
+      padding:28px;
+      border-radius:14px;
+      box-shadow:0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    h2{
+      text-align:center;
+      margin-top:0;
+      color:#2c3e50;
+      margin-bottom:20px;
+    }
+
+    .step{
+      display:none;
+    }
+
+    .step.active{
+      display:block;
+    }
+
+    .form-group{
+      margin-bottom:16px;
+    }
+
+    label{
+      display:block;
+      font-weight:bold;
+      margin-bottom:6px;
+      color:#2c3e50;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="date"]{
+      width:100%;
+      padding:10px 12px;
+      border:1px solid #ccc;
+      border-radius:8px;
+      outline:none;
+      font-size:15px;
+      transition:0.2s;
+    }
+
+    input:focus{
+      border-color:#3498db;
+      box-shadow:0 0 6px rgba(52,152,219,0.3);
+    }
+
+    .radio-group{
+      display:flex;
+      gap:18px;
+      flex-wrap:wrap;
+      margin-top:6px;
+    }
+
+    .radio-group label{
+      font-weight:normal;
+      margin:0;
+      color:#333;
+    }
+
+    .error{
+      color:#e74c3c;
+      font-size:13px;
+      margin-top:5px;
+    }
+
+    .btn-group{
+      display:flex;
+      gap:10px;
+      margin-top:18px;
+    }
+
+    .btn-group button{
+      flex:1;
+      padding:11px;
+      border:none;
+      border-radius:8px;
+      color:white;
+      font-size:15px;
+      font-weight:bold;
+      cursor:pointer;
+      transition:0.2s;
+    }
+
+    .next-btn,
+    .submit-btn{
+      background:#3498db;
+    }
+
+    .next-btn:hover,
+    .submit-btn:hover{
+      background:#2980b9;
+    }
+
+    .back-btn{
+      background:#95a5a6;
+    }
+
+    .back-btn:hover{
+      background:#7f8c8d;
+    }
+
+    .progress-text{
+      text-align:center;
+      margin-bottom:10px;
+      color:#2c3e50;
+      font-weight:bold;
+    }
+
+    #progressBar{
+      width:100%;
+      height:14px;
+      background:#dfe6e9;
+      border-radius:999px;
+      overflow:hidden;
+      margin-bottom:18px;
+    }
+
+    #progressFill{
+      height:100%;
+      width:33%;
+      background:linear-gradient(90deg,#27ae60,#2ecc71);
+      border-radius:999px;
+      transition:0.3s;
+    }
+
+    #summary{
+      background:#f8fbff;
+      border:1px solid #d6eaf8;
+      border-radius:10px;
+      padding:15px;
+      line-height:1.7;
+    }
+
+    #successMessage{
+      display:none;
+      color:#27ae60;
+      font-weight:bold;
+      font-size:18px;
+      text-align:center;
+      padding:20px 10px;
+      background:#ecfff3;
+      border:1px solid #b7efc5;
+      border-radius:10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Form Đăng Ký Nhiều Bước</h2>
+
+    <div class="progress-text">Bước <span id="currentStep">1</span>/3</div>
+    <div id="progressBar">
+      <div id="progressFill"></div>
+    </div>
+
+    <form id="multiStepForm">
+      <div class="step active" id="step1">
+        <h3>Bước 1 – Thông tin cá nhân</h3>
+
+        <div class="form-group">
+          <label for="fullname">Họ tên</label>
+          <input type="text" id="fullname">
+          <div id="fullnameError" class="error"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="birthday">Ngày sinh</label>
+          <input type="date" id="birthday">
+          <div id="birthdayError" class="error"></div>
+        </div>
+
+        <div class="form-group">
+          <label>Giới tính</label>
+          <div class="radio-group">
+            <label><input type="radio" name="gender" value="Nam"> Nam</label>
+            <label><input type="radio" name="gender" value="Nữ"> Nữ</label>
+            <label><input type="radio" name="gender" value="Khác"> Khác</label>
+          </div>
+          <div id="genderError" class="error"></div>
+        </div>
+
+        <div class="btn-group">
+          <button type="button" id="next1" class="next-btn">Tiếp theo</button>
+        </div>
+      </div>
+
+      <div class="step" id="step2">
+        <h3>Bước 2 – Thông tin tài khoản</h3>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="text" id="email">
+          <div id="emailError" class="error"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Mật khẩu</label>
+          <input type="password" id="password">
+          <div id="passwordError" class="error"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Xác nhận mật khẩu</label>
+          <input type="password" id="confirmPassword">
+          <div id="confirmPasswordError" class="error"></div>
+        </div>
+
+        <div class="btn-group">
+          <button type="button" id="back1" class="back-btn">Quay lại</button>
+          <button type="button" id="next2" class="next-btn">Tiếp theo</button>
+        </div>
+      </div>
+
+      <div class="step" id="step3">
+        <h3>Bước 3 – Xác nhận</h3>
+
+        <div id="summary"></div>
+
+        <div class="btn-group">
+          <button type="button" id="back2" class="back-btn">Quay lại</button>
+          <button type="submit" class="submit-btn">Hoàn tất</button>
+        </div>
+      </div>
+    </form>
+
+    <div id="successMessage">Đăng ký thành công! 🎉</div>
+  </div>
+
+  <script>
+    let currentStep = 1;
+
+    const form = document.getElementById("multiStepForm");
+    const currentStepText = document.getElementById("currentStep");
+    const progressFill = document.getElementById("progressFill");
+    const summary = document.getElementById("summary");
+    const successMessage = document.getElementById("successMessage");
+
+    const fullname = document.getElementById("fullname");
+    const birthday = document.getElementById("birthday");
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    const confirmPassword = document.getElementById("confirmPassword");
+
+    function showError(fieldId, message) {
+      document.getElementById(fieldId + "Error").textContent = message;
+    }
+
+    function clearError(fieldId) {
+      document.getElementById(fieldId + "Error").textContent = "";
+    }
+
+    function showStep(step) {
+      document.querySelectorAll(".step").forEach(function(item) {
+        item.classList.remove("active");
+      });
+
+      document.getElementById("step" + step).classList.add("active");
+      currentStep = step;
+      currentStepText.textContent = step;
+      progressFill.style.width = (step / 3 * 100) + "%";
+
+      if (step === 3) {
+        updateSummary();
+      }
+    }
+
+    function validateFullname() {
+      const value = fullname.value.trim();
+      const regex = /^[A-Za-zÀ-ỹ\s]+$/;
+
+      if (value === "") {
+        showError("fullname", "Họ tên không được để trống");
+        return false;
+      }
+
+      if (value.length < 3) {
+        showError("fullname", "Họ tên phải có ít nhất 3 ký tự");
+        return false;
+      }
+
+      if (!regex.test(value)) {
+        showError("fullname", "Họ tên chỉ chứa chữ cái và khoảng trắng");
+        return false;
+      }
+
+      clearError("fullname");
+      return true;
+    }
+
+    function validateBirthday() {
+      if (birthday.value === "") {
+        showError("birthday", "Vui lòng chọn ngày sinh");
+        return false;
+      }
+
+      clearError("birthday");
+      return true;
+    }
+
+    function validateGender() {
+      const gender = document.querySelector('input[name="gender"]:checked');
+
+      if (!gender) {
+        showError("gender", "Vui lòng chọn giới tính");
+        return false;
+      }
+
+      clearError("gender");
+      return true;
+    }
+
+    function validateEmail() {
+      const value = email.value.trim();
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (value === "") {
+        showError("email", "Email không được để trống");
+        return false;
+      }
+
+      if (!regex.test(value)) {
+        showError("email", "Email không đúng định dạng");
+        return false;
+      }
+
+      clearError("email");
+      return true;
+    }
+
+    function validatePassword() {
+      const value = password.value;
+      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+      if (value === "") {
+        showError("password", "Mật khẩu không được để trống");
+        return false;
+      }
+
+      if (!regex.test(value)) {
+        showError("password", "Mật khẩu ít nhất 8 ký tự, có chữ hoa, chữ thường và số");
+        return false;
+      }
+
+      clearError("password");
+      return true;
+    }
+
+    function validateConfirmPassword() {
+      if (confirmPassword.value === "") {
+        showError("confirmPassword", "Vui lòng xác nhận mật khẩu");
+        return false;
+      }
+
+      if (confirmPassword.value !== password.value) {
+        showError("confirmPassword", "Mật khẩu xác nhận không khớp");
+        return false;
+      }
+
+      clearError("confirmPassword");
+      return true;
+    }
+
+    function validateStep1() {
+      return validateFullname() & validateBirthday() & validateGender();
+    }
+
+    function validateStep2() {
+      return validateEmail() & validatePassword() & validateConfirmPassword();
+    }
+
+    function getGenderValue() {
+      const gender = document.querySelector('input[name="gender"]:checked');
+      return gender ? gender.value : "";
+    }
+
+    function updateSummary() {
+      summary.innerHTML = `
+        <p><strong>Họ tên:</strong> ${fullname.value}</p>
+        <p><strong>Ngày sinh:</strong> ${birthday.value}</p>
+        <p><strong>Giới tính:</strong> ${getGenderValue()}</p>
+        <p><strong>Email:</strong> ${email.value}</p>
+      `;
+    }
+
+    document.getElementById("next1").addEventListener("click", function() {
+      if (validateStep1()) {
+        showStep(2);
+      }
+    });
+
+    document.getElementById("back1").addEventListener("click", function() {
+      showStep(1);
+    });
+
+    document.getElementById("next2").addEventListener("click", function() {
+      if (validateStep2()) {
+        showStep(3);
+      }
+    });
+
+    document.getElementById("back2").addEventListener("click", function() {
+      showStep(2);
+    });
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      successMessage.style.display = "block";
+      form.style.display = "none";
+    });
+
+    fullname.addEventListener("blur", validateFullname);
+    birthday.addEventListener("blur", validateBirthday);
+    email.addEventListener("blur", validateEmail);
+    password.addEventListener("blur", validatePassword);
+    confirmPassword.addEventListener("blur", validateConfirmPassword);
+
+    fullname.addEventListener("input", function() {
+      clearError("fullname");
+    });
+
+    birthday.addEventListener("input", function() {
+      clearError("birthday");
+    });
+
+    email.addEventListener("input", function() {
+      clearError("email");
+    });
+
+    password.addEventListener("input", function() {
+      clearError("password");
+    });
+
+    confirmPassword.addEventListener("input", function() {
+      clearError("confirmPassword");
+    });
+
+    const genderRadios = document.querySelectorAll('input[name="gender"]');
+    genderRadios.forEach(function(radio) {
+      radio.addEventListener("change", function() {
+        clearError("gender");
+      });
+    });
+  </script>
+
+</body>
+</html>
