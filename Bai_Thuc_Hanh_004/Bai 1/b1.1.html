@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bài 1.1 - Bảng Điểm Sinh Viên</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 30px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #1f4e79;
+    }
+
+    .form-group {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .form-item {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #1f4e79;
+      box-shadow: 0 0 0 3px rgba(31, 78, 121, 0.12);
+    }
+
+    .btn-area {
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 8px;
+      background: #1f4e79;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #163a5a;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+
+    thead {
+      background: #1f4e79;
+      color: white;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #f9fbfd;
+    }
+
+    .weak-row {
+      background: #fff3cd !important;
+    }
+
+    .delete-btn {
+      background: #dc3545;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .delete-btn:hover {
+      background: #b02a37;
+    }
+
+    .stats {
+      margin-top: 18px;
+      padding: 14px;
+      background: #eef5fb;
+      border-left: 5px solid #1f4e79;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .empty-message {
+      text-align: center;
+      color: #777;
+      padding: 16px;
+      font-style: italic;
+    }
+
+    @media (max-width: 768px) {
+      th, td {
+        font-size: 14px;
+        padding: 10px 6px;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Quản Lý Bảng Điểm Sinh Viên</h1>
+
+    <div class="form-group">
+      <div class="form-item">
+        <label for="hoTen">Họ tên</label>
+        <input type="text" id="hoTen" placeholder="Nhập họ tên sinh viên" />
+      </div>
+
+      <div class="form-item">
+        <label for="diem">Điểm (0 - 10)</label>
+        <input type="number" id="diem" placeholder="Nhập điểm" min="0" max="10" step="0.1" />
+      </div>
+    </div>
+
+    <div class="btn-area">
+      <button id="btnThem">Thêm</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Họ tên</th>
+          <th>Điểm</th>
+          <th>Xếp loại</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody id="studentTableBody">
+        <tr>
+          <td colspan="5" class="empty-message">Chưa có sinh viên nào trong danh sách</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="stats" id="stats">
+      Tổng số sinh viên: 0 | Điểm trung bình: 0.00
+    </div>
+  </div>
+
+  <script>
+    // Mảng lưu danh sách sinh viên
+    const students = [];
+
+    // Lấy phần tử DOM
+    const hoTenInput = document.getElementById("hoTen");
+    const diemInput = document.getElementById("diem");
+    const btnThem = document.getElementById("btnThem");
+    const tableBody = document.getElementById("studentTableBody");
+    const stats = document.getElementById("stats");
+
+    // Hàm xếp loại
+    function xepLoai(diem) {
+      if (diem >= 8.5) return "Giỏi";
+      if (diem >= 7.0) return "Khá";
+      if (diem >= 5.0) return "Trung bình";
+      return "Yếu";
+    }
+
+    // Hàm render bảng
+    function renderTable() {
+      if (students.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="5" class="empty-message">Chưa có sinh viên nào trong danh sách</td>
+          </tr>
+        `;
+        updateStats();
+        return;
+      }
+
+      let html = "";
+
+      students.forEach((student, index) => {
+        const loai = xepLoai(student.diem);
+        const rowClass = student.diem < 5 ? "weak-row" : "";
+
+        html += `
+          <tr class="${rowClass}">
+            <td>${index + 1}</td>
+            <td>${student.hoTen}</td>
+            <td>${student.diem.toFixed(1)}</td>
+            <td>${loai}</td>
+            <td>
+              <button class="delete-btn" data-index="${index}">Xóa</button>
+            </td>
+          </tr>
+        `;
+      });
+
+      tableBody.innerHTML = html;
+      updateStats();
+    }
+
+    // Hàm cập nhật thống kê
+    function updateStats() {
+      const tongSinhVien = students.length;
+
+      if (tongSinhVien === 0) {
+        stats.textContent = "Tổng số sinh viên: 0 | Điểm trung bình: 0.00";
+        return;
+      }
+
+      const tongDiem = students.reduce((sum, student) => sum + student.diem, 0);
+      const diemTrungBinh = tongDiem / tongSinhVien;
+
+      stats.textContent = `Tổng số sinh viên: ${tongSinhVien} | Điểm trung bình: ${diemTrungBinh.toFixed(2)}`;
+    }
+
+    // Hàm thêm sinh viên
+    function themSinhVien() {
+      const hoTen = hoTenInput.value.trim();
+      const diem = parseFloat(diemInput.value);
+
+      // Kiểm tra dữ liệu
+      if (hoTen === "") {
+        alert("Họ tên không được để trống!");
+        hoTenInput.focus();
+        return;
+      }
+
+      if (isNaN(diem) || diem < 0 || diem > 10) {
+        alert("Điểm phải là số từ 0 đến 10!");
+        diemInput.focus();
+        return;
+      }
+
+      // Thêm vào mảng
+      students.push({
+        hoTen: hoTen,
+        diem: diem
+      });
+
+      // Render lại bảng
+      renderTable();
+
+      // Xóa trắng input
+      hoTenInput.value = "";
+      diemInput.value = "";
+
+      // Đưa con trỏ về ô họ tên
+      hoTenInput.focus();
+    }
+
+    // Sự kiện click nút Thêm
+    btnThem.addEventListener("click", themSinhVien);
+
+    // Nhấn Enter tại ô điểm để thêm
+    diemInput.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        themSinhVien();
+      }
+    });
+
+    // Event Delegation cho nút Xóa
+    tableBody.addEventListener("click", function (event) {
+      if (event.target.classList.contains("delete-btn")) {
+        const index = event.target.getAttribute("data-index");
+        students.splice(index, 1);
+        renderTable();
+      }
+    });
+
+    // Render ban đầu
+    renderTable();
+  </script>
+</body>
+</html>
