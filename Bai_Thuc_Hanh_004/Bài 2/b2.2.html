@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Bài 2.2 - Form đặt hàng</title>
+</head>
+<body>
+
+  <h2>Form Đặt Hàng</h2>
+
+  <form id="orderForm">
+    <div>
+      <label>Tên sản phẩm:</label><br>
+      <select id="product">
+        <option value="">-- Chọn sản phẩm --</option>
+        <option value="Áo">Áo</option>
+        <option value="Quần">Quần</option>
+        <option value="Giày">Giày</option>
+      </select>
+      <div id="productError"></div>
+    </div>
+
+    <br>
+
+    <div>
+      <label>Số lượng:</label><br>
+      <input type="number" id="quantity" min="1" max="99">
+      <div id="quantityError"></div>
+    </div>
+
+    <br>
+
+    <div>
+      <label>Ngày giao hàng:</label><br>
+      <input type="date" id="deliveryDate">
+      <div id="deliveryDateError"></div>
+    </div>
+
+    <br>
+
+    <div>
+      <label>Địa chỉ giao:</label><br>
+      <input type="text" id="address">
+      <div id="addressError"></div>
+    </div>
+
+    <br>
+
+    <div>
+      <label>Ghi chú:</label><br>
+      <textarea id="note" rows="4" cols="40"></textarea>
+      <div id="noteCount">0/200</div>
+      <div id="noteError"></div>
+    </div>
+
+    <br>
+
+    <div>
+      <label>Phương thức thanh toán:</label><br>
+      <input type="radio" name="payment" value="COD"> COD
+      <input type="radio" name="payment" value="Chuyển khoản"> Chuyển khoản
+      <input type="radio" name="payment" value="Ví điện tử"> Ví điện tử
+      <div id="paymentError"></div>
+    </div>
+
+    <br>
+
+    <div>
+      <strong>Tổng tiền: </strong><span id="totalPrice">0</span> VNĐ
+    </div>
+
+    <br>
+
+    <button type="submit">Đặt hàng</button>
+  </form>
+
+  <br>
+
+  <div id="confirmBox" style="display:none; border:1px solid black; padding:10px;">
+    <h3>Xác nhận đơn hàng</h3>
+    <div id="confirmContent"></div>
+    <br>
+    <button id="confirmBtn">Xác nhận</button>
+    <button id="cancelBtn">Hủy</button>
+  </div>
+
+  <br>
+
+  <div id="successMessage" style="display:none;"></div>
+
+  <script>
+    const prices = {
+      "Áo": 150000,
+      "Quần": 200000,
+      "Giày": 500000
+    };
+
+    const form = document.getElementById("orderForm");
+    const product = document.getElementById("product");
+    const quantity = document.getElementById("quantity");
+    const deliveryDate = document.getElementById("deliveryDate");
+    const address = document.getElementById("address");
+    const note = document.getElementById("note");
+    const noteCount = document.getElementById("noteCount");
+    const totalPrice = document.getElementById("totalPrice");
+
+    const confirmBox = document.getElementById("confirmBox");
+    const confirmContent = document.getElementById("confirmContent");
+    const confirmBtn = document.getElementById("confirmBtn");
+    const cancelBtn = document.getElementById("cancelBtn");
+    const successMessage = document.getElementById("successMessage");
+
+    function showError(fieldId, message) {
+      document.getElementById(fieldId + "Error").textContent = message;
+    }
+
+    function clearError(fieldId) {
+      document.getElementById(fieldId + "Error").textContent = "";
+    }
+
+    function validateProduct() {
+      if (product.value === "") {
+        showError("product", "Vui lòng chọn sản phẩm");
+        return false;
+      }
+      clearError("product");
+      return true;
+    }
+
+    function validateQuantity() {
+      const value = Number(quantity.value);
+
+      if (quantity.value.trim() === "") {
+        showError("quantity", "Số lượng không được để trống");
+        return false;
+      }
+
+      if (!Number.isInteger(value) || value < 1 || value > 99) {
+        showError("quantity", "Số lượng phải là số nguyên từ 1 đến 99");
+        return false;
+      }
+
+      clearError("quantity");
+      return true;
+    }
+
+    function validateDeliveryDate() {
+      const value = deliveryDate.value;
+
+      if (value === "") {
+        showError("deliveryDate", "Vui lòng chọn ngày giao hàng");
+        return false;
+      }
+
+      const selected = new Date(value);
+      const today = new Date();
+      const maxDate = new Date();
+
+      today.setHours(0, 0, 0, 0);
+      maxDate.setHours(0, 0, 0, 0);
+      maxDate.setDate(maxDate.getDate() + 30);
+      selected.setHours(0, 0, 0, 0);
+
+      if (selected < today) {
+        showError("deliveryDate", "Ngày giao không được là ngày trong quá khứ");
+        return false;
+      }
+
+      if (selected > maxDate) {
+        showError("deliveryDate", "Ngày giao không được quá 30 ngày từ hôm nay");
+        return false;
+      }
+
+      clearError("deliveryDate");
+      return true;
+    }
+
+    function validateAddress() {
+      const value = address.value.trim();
+
+      if (value === "") {
+        showError("address", "Địa chỉ không được để trống");
+        return false;
+      }
+
+      if (value.length < 10) {
+        showError("address", "Địa chỉ phải có ít nhất 10 ký tự");
+        return false;
+      }
+
+      clearError("address");
+      return true;
+    }
+
+    function validateNote() {
+      const value = note.value;
+
+      if (value.length > 200) {
+        showError("note", "Ghi chú không được vượt quá 200 ký tự");
+        return false;
+      }
+
+      clearError("note");
+      return true;
+    }
+
+    function validatePayment() {
+      const payment = document.querySelector('input[name="payment"]:checked');
+
+      if (!payment) {
+        showError("payment", "Vui lòng chọn phương thức thanh toán");
+        return false;
+      }
+
+      clearError("payment");
+      return true;
+    }
+
+    function updateNoteCount() {
+      const length = note.value.length;
+      noteCount.textContent = length + "/200";
+
+      if (length > 200) {
+        noteCount.style.color = "red";
+        showError("note", "Ghi chú không được vượt quá 200 ký tự");
+      } else {
+        noteCount.style.color = "black";
+        clearError("note");
+      }
+    }
+
+    function updateTotalPrice() {
+      const productName = product.value;
+      const qty = Number(quantity.value);
+
+      if (prices[productName] && Number.isInteger(qty) && qty > 0) {
+        const total = prices[productName] * qty;
+        totalPrice.textContent = total.toLocaleString("vi-VN");
+      } else {
+        totalPrice.textContent = "0";
+      }
+    }
+
+    function getSelectedPayment() {
+      const payment = document.querySelector('input[name="payment"]:checked');
+      return payment ? payment.value : "";
+    }
+
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const isValid =
+        validateProduct() &
+        validateQuantity() &
+        validateDeliveryDate() &
+        validateAddress() &
+        validateNote() &
+        validatePayment();
+
+      if (isValid) {
+        const productName = product.value;
+        const qty = Number(quantity.value);
+        const total = prices[productName] * qty;
+        const date = deliveryDate.value;
+
+        confirmContent.innerHTML = `
+          <p>Tên sản phẩm: ${productName}</p>
+          <p>Số lượng: ${qty}</p>
+          <p>Tổng tiền: ${total.toLocaleString("vi-VN")} VNĐ</p>
+          <p>Ngày giao: ${date}</p>
+          <p>Xác nhận đặt hàng?</p>
+        `;
+
+        confirmBox.style.display = "block";
+      }
+    });
+
+    confirmBtn.addEventListener("click", function() {
+      form.style.display = "none";
+      confirmBox.style.display = "none";
+      successMessage.style.display = "block";
+      successMessage.innerHTML = "Đặt hàng thành công!";
+    });
+
+    cancelBtn.addEventListener("click", function() {
+      confirmBox.style.display = "none";
+    });
+
+    product.addEventListener("change", function() {
+      validateProduct();
+      updateTotalPrice();
+    });
+
+    quantity.addEventListener("blur", validateQuantity);
+    quantity.addEventListener("input", function() {
+      clearError("quantity");
+      updateTotalPrice();
+    });
+
+    deliveryDate.addEventListener("blur", validateDeliveryDate);
+    deliveryDate.addEventListener("input", function() {
+      clearError("deliveryDate");
+    });
+
+    address.addEventListener("blur", validateAddress);
+    address.addEventListener("input", function() {
+      clearError("address");
+    });
+
+    note.addEventListener("blur", validateNote);
+    note.addEventListener("input", function() {
+      updateNoteCount();
+    });
+
+    const paymentRadios = document.querySelectorAll('input[name="payment"]');
+    paymentRadios.forEach(function(radio) {
+      radio.addEventListener("change", function() {
+        clearError("payment");
+      });
+    });
+
+    updateNoteCount();
+    updateTotalPrice();
+  </script>
+
+</body>
+</html>
